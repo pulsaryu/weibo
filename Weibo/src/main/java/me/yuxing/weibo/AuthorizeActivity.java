@@ -2,8 +2,10 @@ package me.yuxing.weibo;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -58,6 +60,7 @@ public class AuthorizeActivity extends Activity {
         mOAuthState = genNewOAuthState();
         params.putString("state", mOAuthState);
         params.putString("display", "mobile");
+        params.putString("forcelogin", "true");
         String url = API_OAUTH2_AUTHORIZE + "?" + URLUtil.buildQuery(params);
         mLoginView.loadUrl(url);
     }
@@ -95,6 +98,8 @@ public class AuthorizeActivity extends Activity {
         String code = query.getString("code");
 
         if (validateState(state)) {
+            mLoginView.setVisibility(View.GONE);
+            mProgressBar.setVisibility(View.VISIBLE);
             requestAccessTokenWithCode(code);
         }
     }
@@ -135,6 +140,11 @@ public class AuthorizeActivity extends Activity {
     }
 
     private void onAuthorized(OAuthToken oAuthToken) {
-        Log.v(TAG, "token = " + oAuthToken.access_token);
+        Account.addToken(this, oAuthToken.uid, oAuthToken.access_token, oAuthToken.expires_in);
+        Intent returnIntent = getIntent().getParcelableExtra(EXTRA_RETURN);
+        if (returnIntent != null) {
+            startActivity(returnIntent);
+        }
+        finish();
     }
 }

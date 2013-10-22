@@ -10,7 +10,7 @@ public abstract class BaseActivity extends Activity {
 
     public void checkAuthAndStartActivity(Intent intent) {
         if (Account.isAuthorized(this)) {
-            super.startActivity(intent);
+            startActivity(intent);
         } else {
             Intent authIntent = new Intent(this, AuthorizeActivity.class);
             authIntent.putExtra(AuthorizeActivity.EXTRA_RETURN, intent);
