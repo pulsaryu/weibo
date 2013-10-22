@@ -4,12 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <fragment
-        android:id="@+id/authorize_fragment"
+    <WebView
+        android:id="@+id/login_view"
         android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:name="me.yuxing.weibo.AuthorizeFragment"
-        tools:layout="@layout/fragment_autorize" />
+        android:layout_width="match_parent"/>
 
     <ProgressBar
         style="?android:attr/progressBarStyleLarge"

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- weibo -->
+    <string name="weibo_app_key">3539919733</string>
+    <string name="weibo_app_secret">d843792838c9ff4fa3f0bc4ec2446b98</string>
+    <string name="weibo_callback">http://yuxing.me/weibo/callback</string>
+</resources>
