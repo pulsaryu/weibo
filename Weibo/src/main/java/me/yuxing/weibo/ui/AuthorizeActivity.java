@@ -1,4 +1,4 @@
-package me.yuxing.weibo;
+package me.yuxing.weibo.ui;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -17,9 +17,11 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 
+import me.yuxing.weibo.Account;
+import me.yuxing.weibo.R;
+import me.yuxing.weibo.WeiboApplication;
 import me.yuxing.weibo.model.OAuthToken;
 import me.yuxing.weibo.util.URLUtil;
 
@@ -109,7 +111,7 @@ public class AuthorizeActivity extends Activity {
     }
 
     private void requestAccessTokenWithCode(String code) {
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        RequestQueue requestQueue = WeiboApplication.getInstance().getRequestQueue();
         Bundle params = new Bundle();
         params.putString("client_id", getString(R.string.weibo_app_key));
         params.putString("client_secret", getString(R.string.weibo_app_secret));

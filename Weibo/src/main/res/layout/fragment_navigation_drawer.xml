@@ -6,4 +6,4 @@
     android:divider="@android:color/transparent"
     android:dividerHeight="0dp"
     android:background="#cccc"
-    tools:context="me.yuxing.weibo.NavigationDrawerFragment" />
+    tools:context="me.yuxing.weibo.ui.NavigationDrawerFragment" />

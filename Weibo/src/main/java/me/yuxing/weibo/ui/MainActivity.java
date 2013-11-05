@@ -1,27 +1,26 @@
-package me.yuxing.weibo;
+package me.yuxing.weibo.ui;
 
-import android.app.Activity;
-;
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Context;
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
+import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class MainActivity extends Activity
+;import me.yuxing.weibo.Account;
+import me.yuxing.weibo.R;
+
+public class MainActivity extends BaseActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     /**
@@ -53,15 +52,22 @@ public class MainActivity extends Activity
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-                .commit();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        switch (position) {
+            case 0:
+                mTitle = getString(R.string.title_home);
+                fragmentTransaction.replace(R.id.container, new StatusesTimelineFragment());
+                break;
+            default:
+                fragmentTransaction.replace(R.id.container, PlaceholderFragment.newInstance(position + 1));
+        }
+        fragmentTransaction.commit();
     }
 
     public void onSectionAttached(int number) {
         switch (number) {
             case 1:
-                mTitle = getString(R.string.title_section1);
+                mTitle = getString(R.string.title_home);
                 break;
             case 2:
                 mTitle = getString(R.string.title_section2);

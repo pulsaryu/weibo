@@ -1,4 +1,4 @@
-package me.yuxing.weibo;
+package me.yuxing.weibo.ui;
 
 import android.content.Intent;
 import android.os.Bundle;

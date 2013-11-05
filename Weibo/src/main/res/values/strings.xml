@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">Weibo</string>
+    <string name="title_home">首页</string>
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
@@ -14,5 +15,8 @@
     <string name="dialog_message_are_you_sure_logout">确定要注销当前帐户吗?</string>
     <string name="ok">确定</string>
     <string name="cancel">取消</string>
+    <string name="message_expired_token">授权已过期, 需要重新授权.</string>
+    <string name="title_error">错误</string>
+    <string name="refresh">刷新</string>
 
 </resources>
