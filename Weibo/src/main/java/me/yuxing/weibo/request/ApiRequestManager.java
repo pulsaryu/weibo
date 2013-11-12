@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.widget.Toast;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -16,6 +17,7 @@ import com.google.gson.Gson;
 
 import java.io.UnsupportedEncodingException;
 
+import me.yuxing.utils.Util;
 import me.yuxing.volley.GsonRequest;
 import me.yuxing.volley.HttpParams;
 import me.yuxing.weibo.Account;
@@ -42,6 +44,16 @@ public class ApiRequestManager {
     }
 
     public static <T> Request<T> newRequest(final Context context, Class<T> cls, final int method, final String api, HttpParams params, final Callback<T> callback) {
+
+        if (!Util.isNetworkConnected(context)) {
+            if (callback != null) {
+                String errorMessage = context.getString(R.string.no_network_available);
+                callback.onResponse(null, new ApiError(errorMessage));
+                Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show();
+            }
+            return null;
+        }
+
         String url = String.format(Api.BASE_URL, api);
 
         if (method == Request.Method.GET) {

@@ -8,6 +8,15 @@ public class ApiError extends Throwable {
     public int error_code;
     public String request;
 
+    public ApiError(){
+        this(null);
+    }
+
+    public ApiError(String message) {
+        super();
+        error = message;
+    }
+
     @Override
     public String getMessage() {
         return error;

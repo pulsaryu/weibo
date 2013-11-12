@@ -74,6 +74,8 @@ public class StatusesTimelineFragment extends ListFragment implements AbsListVie
                     }
                     mStatusAdapter.addItems(Arrays.asList(response.statuses));
                     mStatusAdapter.notifyDataSetChanged();
+                } else if (error != null) {
+                    setEmptyText(error.getMessage());
                 }
 
                 setListShown(true);
@@ -84,6 +86,8 @@ public class StatusesTimelineFragment extends ListFragment implements AbsListVie
     }
 
     private void loadMore() {
+        if (mStatusAdapter.getCount() == 0)
+            return;
         long maxId = mStatusAdapter.getItem(mStatusAdapter.getCount() - 1).id;
         loadData(maxId);
     }

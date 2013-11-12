@@ -2,6 +2,7 @@ package me.yuxing.weibo.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -12,7 +13,7 @@ import me.yuxing.weibo.R;
  * Created by yuxing on 13-10-21.
  */
 public abstract class BaseActivity extends Activity {
-
+    private static final String TAG = "BaseActivity";
     private Menu mOptionsMenu;
 
     public void checkAuthAndStartActivity(Intent intent) {
@@ -32,8 +33,10 @@ public abstract class BaseActivity extends Activity {
     }
 
     public void setRefreshActionItemState(boolean refreshing) {
-        if (mOptionsMenu == null)
+        if (mOptionsMenu == null) {
+            Log.d(TAG, "mOptionsMenu is null");
             return;
+        }
 
         final MenuItem refreshItem = mOptionsMenu.findItem(R.id.action_refresh);
         if (refreshItem != null) {
