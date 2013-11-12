@@ -1,6 +1,5 @@
 package me.yuxing.weibo.ui;
 
-import android.app.ListFragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -28,7 +28,7 @@ import me.yuxing.weibo.request.WeiboImageView;
 /**
  * Created by yuxing on 13-10-22.
  */
-public class StatusesTimelineFragment extends ListFragment implements AbsListView.OnScrollListener{
+public class StatusesTimelineFragment extends BaseFragment implements AbsListView.OnScrollListener{
 
     private static final String TAG = "StatusesTimelineFragment";
     private static final int COUNT_REMAIND_FOR_LOAD_MORE = 5;
@@ -36,6 +36,7 @@ public class StatusesTimelineFragment extends ListFragment implements AbsListVie
     private Request<?> mRequest;
     private boolean isLoading = true;
     private boolean isRefresh = true;
+    private ListView mListView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,20 +45,26 @@ public class StatusesTimelineFragment extends ListFragment implements AbsListVie
     }
 
     @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_statuses_timeline, container, false);
+        mListView = (ListView) view.findViewById(R.id.listView);
+        return view;
+    }
+
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        getListView().setOnScrollListener(this);
-
         setHasOptionsMenu(true);
-        setListAdapter(mStatusAdapter);
-        setListShown(false);
+
+        mListView.setOnScrollListener(this);
+        mListView.setAdapter(mStatusAdapter);
 
         loadData(0);
     }
 
     private void loadData(long maxId) {
-        ((BaseActivity)getActivity()).setRefreshActionItemState(true);
+        getActionBarHelper().setRefreshActionItemState(true);
         isLoading = true;
 
         if (mRequest != null) {
@@ -75,11 +82,9 @@ public class StatusesTimelineFragment extends ListFragment implements AbsListVie
                     mStatusAdapter.addItems(Arrays.asList(response.statuses));
                     mStatusAdapter.notifyDataSetChanged();
                 } else if (error != null) {
-                    setEmptyText(error.getMessage());
                 }
 
-                setListShown(true);
-                ((BaseActivity)getActivity()).setRefreshActionItemState(false);
+                getActionBarHelper().setRefreshActionItemState(false);
                 isLoading = false;
             }
         });
@@ -102,7 +107,7 @@ public class StatusesTimelineFragment extends ListFragment implements AbsListVie
 
     private void refreshData() {
         isRefresh = true;
-        getListView().setSelection(0);
+        mListView.setSelection(0);
         loadData(0);
     }
 

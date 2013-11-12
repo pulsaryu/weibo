@@ -94,7 +94,6 @@ public class MainActivity extends BaseActivity
             // decide what to show in the action bar.
             getMenuInflater().inflate(R.menu.main, menu);
             restoreActionBar();
-            return true;
         }
         return super.onCreateOptionsMenu(menu);
     }

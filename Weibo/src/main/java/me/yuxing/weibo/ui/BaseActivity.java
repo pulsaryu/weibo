@@ -2,19 +2,18 @@ package me.yuxing.weibo.ui;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 
 import me.yuxing.weibo.Account;
-import me.yuxing.weibo.R;
+import me.yuxing.weibo.ActionBarHelper;
 
 /**
  * Created by yuxing on 13-10-21.
  */
 public abstract class BaseActivity extends Activity {
     private static final String TAG = "BaseActivity";
-    private Menu mOptionsMenu;
+
+    private ActionBarHelper mActionBarHelper = new ActionBarHelper();
 
     public void checkAuthAndStartActivity(Intent intent) {
         if (Account.isAuthorized(this)) {
@@ -28,23 +27,11 @@ public abstract class BaseActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        mOptionsMenu = menu;
+        mActionBarHelper.onCreateOptionsMenu(menu);
         return super.onCreateOptionsMenu(menu);
     }
 
-    public void setRefreshActionItemState(boolean refreshing) {
-        if (mOptionsMenu == null) {
-            Log.d(TAG, "mOptionsMenu is null");
-            return;
-        }
-
-        final MenuItem refreshItem = mOptionsMenu.findItem(R.id.action_refresh);
-        if (refreshItem != null) {
-            if (refreshing) {
-                refreshItem.setActionView(R.layout.actionbar_indeterminate_progress);
-            } else {
-                refreshItem.setActionView(null);
-            }
-        }
+    public ActionBarHelper getActionBarHelper() {
+        return mActionBarHelper;
     }
 }
