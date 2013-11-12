@@ -24,6 +24,7 @@ import me.yuxing.weibo.model.Timeline;
 import me.yuxing.weibo.request.ApiError;
 import me.yuxing.weibo.request.ApiRequestManager;
 import me.yuxing.weibo.request.WeiboImageView;
+import me.yuxing.weibo.widget.AcynsImageView;
 
 /**
  * Created by yuxing on 13-10-22.
@@ -164,6 +165,9 @@ public class StatusesTimelineFragment extends BaseFragment implements AbsListVie
                 pictureView.setVisibility(View.VISIBLE);
                 pictureView.setImageUrl(status.bmiddle_pic, WeiboApplication.getInstance().getImageLoader());
             }
+
+            //bind user
+            ((AcynsImageView) view.findViewById(R.id.user_avatar)).setImageUrl(status.user.profile_image_url);
         }
     }
 }
