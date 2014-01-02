@@ -166,8 +166,11 @@ public class StatusesTimelineFragment extends BaseFragment implements AbsListVie
                 pictureView.setImageUrl(status.bmiddle_pic, WeiboApplication.getInstance().getImageLoader());
             }
 
+            ((TextView) view.findViewById(R.id.time)).setText(status.created_at);
+
             //bind user
             ((AcynsImageView) view.findViewById(R.id.user_avatar)).setImageUrl(status.user.profile_image_url);
+            ((TextView) view.findViewById(R.id.user_name)).setText(status.user.name);
         }
     }
 }

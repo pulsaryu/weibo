@@ -26,7 +26,7 @@ public class AcynsImageView extends NetworkImageView {
     public AcynsImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        mImageLoader = WeiboApplication.getInstance().getImageLoader();
+        mImageLoader = ((WeiboApplication) context.getApplicationContext()).getImageLoader();
     }
 
     public void setImageUrl(String url) {
