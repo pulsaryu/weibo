@@ -2,6 +2,8 @@ package me.yuxing.weibo.ui;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,7 +16,13 @@ import android.widget.TextView;
 
 import com.android.volley.Request;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import me.yuxing.weibo.ArrayAdapter;
 import me.yuxing.weibo.R;
@@ -144,6 +152,9 @@ public class StatusesTimelineFragment extends BaseFragment implements AbsListVie
 
     private static class StatusAdapter extends ArrayAdapter<Status> {
 
+        private DateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
+        private DateFormat mSourceFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", new Locale("en", "CN"));
+
         public StatusAdapter(Context context) {
             super(context);
         }
@@ -155,10 +166,11 @@ public class StatusesTimelineFragment extends BaseFragment implements AbsListVie
 
         @Override
         public void bindView(View view, Status status) {
-            TextView nameView = (TextView) view.findViewById(R.id.name);
-            WeiboImageView pictureView = (WeiboImageView) view.findViewById(R.id.picture);
+            TextView textView = (TextView) view.findViewById(R.id.text);
+            textView.setText(Html.fromHtml(status.text.replaceAll("(http|https):[_/\\-\\.0-9a-zA-Z]+", "<a href=\"$0\">$0</a>")));
+            textView.setMovementMethod(new LinkMovementMethod());
 
-            nameView.setText(status.text);
+            WeiboImageView pictureView = (WeiboImageView) view.findViewById(R.id.picture);
             if (status.bmiddle_pic == null) {
                 pictureView.setVisibility(View.GONE);
             } else {
@@ -166,11 +178,33 @@ public class StatusesTimelineFragment extends BaseFragment implements AbsListVie
                 pictureView.setImageUrl(status.bmiddle_pic, WeiboApplication.getInstance().getImageLoader());
             }
 
-            ((TextView) view.findViewById(R.id.time)).setText(status.created_at);
+            try {
+                ((TextView) view.findViewById(R.id.time)).setText(formatTime(mSourceFormat.parse(status.created_at).getTime()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
             //bind user
-            ((AcynsImageView) view.findViewById(R.id.user_avatar)).setImageUrl(status.user.profile_image_url);
-            ((TextView) view.findViewById(R.id.user_name)).setText(status.user.name);
+            ((AcynsImageView) view.findViewById(R.id.userAvatar)).setImageUrl(status.user.profile_image_url);
+            ((TextView) view.findViewById(R.id.userName)).setText(status.user.name);
+        }
+
+        private String formatTime(long time) {
+            String format;
+
+            int distance = (int) (System.currentTimeMillis() - time) / 1000;
+
+            if (distance < 10) {
+                format = getContext().getString(R.string.time_just_now);
+            } else if (distance < 60) {
+                format = String.format(getContext().getString(R.string.time_n_minutes_ago), distance);
+            } else if (distance < 3600) {
+                format = String.format(getContext().getString(R.string.time_n_seconds_ago), distance/60);
+            } else {
+                format = mDateFormat.format(new Date(time));
+            }
+
+            return format;
         }
     }
 }

@@ -18,6 +18,9 @@
     <string name="message_expired_token">授权已过期, 需要重新授权.</string>
     <string name="title_error">错误</string>
     <string name="refresh">刷新</string>
+    <string name="time_n_seconds_ago">%d秒前</string>
+    <string name="time_n_minutes_ago">%d分钟前</string>
+    <string name="time_just_now">刚刚</string>
     
     <string name="no_network_available">网络连接错误, 请检测网络设置.</string>
 

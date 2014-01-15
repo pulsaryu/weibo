@@ -2,11 +2,13 @@ package me.yuxing.weibo;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 /**
  * Created by yuxing on 13-10-21.
  */
 public class Account {
+    private static final String TAG = "Account";
     private static final String PREF_NAME = "accounts";
     private static final String KEY_UID = "uid";
     private static final String KEY_ACCESS_TOKEN = "access_token";
@@ -22,7 +24,7 @@ public class Account {
         return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
 
-    public static void addToken(final Context context, final String uid, final String accessToken, final int expireIn) {
+    public static void addToken(final Context context, final String uid, final String accessToken, final long expireIn) {
         SharedPreferences pref = getPreferences(context);
         SharedPreferences.Editor edit = pref.edit();
         edit.putString(KEY_UID, uid);

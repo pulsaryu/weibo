@@ -12,17 +12,17 @@
         android:padding="5dp">
 
         <me.yuxing.weibo.widget.AcynsImageView
-            android:id="@+id/user_avatar"
+            android:id="@+id/userAvatar"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"/>
 
         <TextView
-            android:id="@+id/user_name"
+            android:id="@+id/userName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/user_avatar"
+            android:layout_toRightOf="@+id/userAvatar"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="5dp"
             android:textStyle="bold"
@@ -32,8 +32,8 @@
             android:id="@+id/time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/user_name"
-            android:layout_alignLeft="@id/user_name"/>
+            android:layout_below="@id/userName"
+            android:layout_alignLeft="@id/userName"/>
 
     </RelativeLayout>
 
@@ -45,7 +45,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="5dp"
-        android:id="@+id/name" />
+        android:id="@+id/text" />
 
     <me.yuxing.weibo.request.WeiboImageView
         android:id="@+id/picture"
