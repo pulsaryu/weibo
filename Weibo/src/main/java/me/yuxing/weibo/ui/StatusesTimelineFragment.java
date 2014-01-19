@@ -29,6 +29,9 @@ import me.yuxing.weibo.R;
 import me.yuxing.weibo.WeiboApplication;
 import me.yuxing.weibo.model.Status;
 import me.yuxing.weibo.model.Timeline;
+import me.yuxing.weibo.proxy.RequestBuilder;
+import me.yuxing.weibo.proxy.RequestCallback;
+import me.yuxing.weibo.request.Api;
 import me.yuxing.weibo.request.ApiError;
 import me.yuxing.weibo.request.ApiRequestManager;
 import me.yuxing.weibo.request.WeiboImageView;
@@ -80,23 +83,34 @@ public class StatusesTimelineFragment extends BaseFragment implements AbsListVie
             mRequest.cancel();
         }
 
-        mRequest = ApiRequestManager.fetchStatusedHomeTimelin(getActivity(), maxId, new ApiRequestManager.Callback<Timeline>() {
-            @Override
-            public void onResponse(Timeline response, ApiError error) {
-                if (response != null) {
-                    if (isRefresh) {
-                        mStatusAdapter.clear();
-                        isRefresh = false;
-                    }
-                    mStatusAdapter.addItems(Arrays.asList(response.statuses));
-                    mStatusAdapter.notifyDataSetChanged();
-                } else if (error != null) {
-                }
+//        mRequest = ApiRequestManager.fetchStatusedHomeTimelin(getActivity(), maxId, new ApiRequestManager.Callback<Timeline>() {
+//            @Override
+//            public void onResponse(Timeline response, ApiError error) {
+//                if (response != null) {
+//                    if (isRefresh) {
+//                        mStatusAdapter.clear();
+//                        isRefresh = false;
+//                    }
+//                    mStatusAdapter.addItems(Arrays.asList(response.statuses));
+//                    mStatusAdapter.notifyDataSetChanged();
+//                } else if (error != null) {
+//                }
+//
+//                getActionBarHelper().setRefreshActionItemState(false);
+//                isLoading = false;
+//            }
+//        });
 
-                getActionBarHelper().setRefreshActionItemState(false);
-                isLoading = false;
-            }
-        });
+        mRequest = new RequestBuilder(getActivity(), Api.STATUSES_HOME_TIMELINE)
+                .setRequestCallback(new RequestCallback() {
+                    @Override
+                    public void onCompleted(String response, ApiError error) {
+
+                    }
+                })
+                .setTag(this)
+                .build();
+        WeiboApplication.getInstance().getRequestQueue().add(mRequest);
     }
 
     private void loadMore() {
@@ -152,7 +166,7 @@ public class StatusesTimelineFragment extends BaseFragment implements AbsListVie
 
     private static class StatusAdapter extends ArrayAdapter<Status> {
 
-        private DateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
+        private DateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         private DateFormat mSourceFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", new Locale("en", "CN"));
 
         public StatusAdapter(Context context) {
@@ -197,9 +211,9 @@ public class StatusesTimelineFragment extends BaseFragment implements AbsListVie
             if (distance < 10) {
                 format = getContext().getString(R.string.time_just_now);
             } else if (distance < 60) {
-                format = String.format(getContext().getString(R.string.time_n_minutes_ago), distance);
+                format = String.format(getContext().getString(R.string.time_n_seconds_ago), distance);
             } else if (distance < 3600) {
-                format = String.format(getContext().getString(R.string.time_n_seconds_ago), distance/60);
+                format = String.format(getContext().getString(R.string.time_n_minutes_ago), distance/60);
             } else {
                 format = mDateFormat.format(new Date(time));
             }
