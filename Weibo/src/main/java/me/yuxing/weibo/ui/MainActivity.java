@@ -105,6 +105,7 @@ public class MainActivity extends BaseActivity
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case R.id.action_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
                 return true;
             case R.id.action_logout:
                 showLogoutConfirmDialog();
