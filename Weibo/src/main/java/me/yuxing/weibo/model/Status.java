@@ -15,4 +15,5 @@ public class Status {
     public String thumbnail_pic;
     public String bmiddle_pic;
     public String original_pic;
+    public Status retweeted_status;
 }

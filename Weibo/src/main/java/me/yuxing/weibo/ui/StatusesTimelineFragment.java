@@ -15,12 +15,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
+import com.google.gson.Gson;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -33,7 +32,6 @@ import me.yuxing.weibo.proxy.RequestBuilder;
 import me.yuxing.weibo.proxy.RequestCallback;
 import me.yuxing.weibo.request.Api;
 import me.yuxing.weibo.request.ApiError;
-import me.yuxing.weibo.request.ApiRequestManager;
 import me.yuxing.weibo.request.WeiboImageView;
 import me.yuxing.weibo.widget.AcynsImageView;
 
@@ -44,6 +42,7 @@ public class StatusesTimelineFragment extends BaseFragment implements AbsListVie
 
     private static final String TAG = "StatusesTimelineFragment";
     private static final int COUNT_REMAIND_FOR_LOAD_MORE = 5;
+    private static final int COUNT = 50;
     private StatusAdapter mStatusAdapter;
     private Request<?> mRequest;
     private boolean isLoading = true;
@@ -76,36 +75,38 @@ public class StatusesTimelineFragment extends BaseFragment implements AbsListVie
     }
 
     private void loadData(long maxId) {
-        getActionBarHelper().setRefreshActionItemState(true);
-        isLoading = true;
-
         if (mRequest != null) {
             mRequest.cancel();
         }
 
-//        mRequest = ApiRequestManager.fetchStatusedHomeTimelin(getActivity(), maxId, new ApiRequestManager.Callback<Timeline>() {
-//            @Override
-//            public void onResponse(Timeline response, ApiError error) {
-//                if (response != null) {
-//                    if (isRefresh) {
-//                        mStatusAdapter.clear();
-//                        isRefresh = false;
-//                    }
-//                    mStatusAdapter.addItems(Arrays.asList(response.statuses));
-//                    mStatusAdapter.notifyDataSetChanged();
-//                } else if (error != null) {
-//                }
-//
-//                getActionBarHelper().setRefreshActionItemState(false);
-//                isLoading = false;
-//            }
-//        });
+        getActionBarHelper().setRefreshActionItemState(true);
+        isLoading = true;
 
         mRequest = new RequestBuilder(getActivity(), Api.STATUSES_HOME_TIMELINE)
+                .addParams("max_id", maxId)
+                .addParams("count", COUNT)
                 .setRequestCallback(new RequestCallback() {
                     @Override
                     public void onCompleted(String response, ApiError error) {
+                        if (response != null) {
 
+                            if (isRefresh) {
+                                mStatusAdapter.clear();
+                                isRefresh = false;
+                            }
+
+                            Gson gson = new Gson();
+                            Timeline timeline = gson.fromJson(response, Timeline.class);
+                            if (timeline != null) {
+                                mStatusAdapter.addItems(timeline.statuses);
+                            }
+                            mStatusAdapter.notifyDataSetChanged();
+
+                        } else if (error != null) {
+
+                        }
+                        getActionBarHelper().setRefreshActionItemState(false);
+                        isLoading = false;
                     }
                 })
                 .setTag(this)
@@ -123,9 +124,7 @@ public class StatusesTimelineFragment extends BaseFragment implements AbsListVie
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (mRequest != null) {
-            mRequest.cancel();
-        }
+        WeiboApplication.getInstance().getRequestQueue().cancelAll(this);
     }
 
     private void refreshData() {
@@ -175,7 +174,7 @@ public class StatusesTimelineFragment extends BaseFragment implements AbsListVie
 
         @Override
         public View newView(LayoutInflater inflater, ViewGroup parent, Status data) {
-            return inflater.inflate(R.layout.timeline_list_item, parent, false);
+            return inflater.inflate(R.layout.list_timeline_child, parent, false);
         }
 
         @Override

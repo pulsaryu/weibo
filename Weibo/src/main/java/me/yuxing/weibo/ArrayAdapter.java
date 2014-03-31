@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -49,6 +50,10 @@ public abstract class ArrayAdapter<T> extends BaseAdapter {
 
     public void addItems(List<T> items) {
         mData.addAll(items);
+    }
+
+    public void addItems(T[] items) {
+        mData.addAll(Arrays.asList(items));
     }
 
     @Override

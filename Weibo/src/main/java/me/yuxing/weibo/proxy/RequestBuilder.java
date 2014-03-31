@@ -52,6 +52,16 @@ public class RequestBuilder {
         return this;
     }
 
+    public RequestBuilder addParams(String key, int value) {
+        httpParams.put(key, String.valueOf(value));
+        return this;
+    }
+
+    public RequestBuilder addParams(String key, long value) {
+        httpParams.put(key, String.valueOf(value));
+        return this;
+    }
+
     public Request<String> build() {
         String url = createUrl();
         url += "?" + httpParams.toString();
